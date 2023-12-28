@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import os
 
 page_to_scrape = requests.get("https://pokemondb.net/pokedex/national")
 soup = BeautifulSoup(page_to_scrape.text, "html.parser")
@@ -68,7 +69,27 @@ def scrap_pokemon(start, end):
     return x
 
 
-kanto = scrap_pokemon(0, 151)
+#kanto = scrap_pokemon(0, 151)
 
-with open("pokemon.txt", "w", encoding="windows-1252") as file:
-    file.write(kanto)
+#with open("pokemon.txt", "w", encoding="windows-1252") as file:
+ #   file.write(kanto)
+
+
+def img_scrape(start,end):
+    for i in range(start,end):
+        name = pokemon[i]
+        apostraphe = "'"
+        page = requests.get(f"https://img.pokemondb.net/sprites/home/normal/{name.lower().replace('. ', '-').replace('.', '').replace(' ', '-').replace('é', 'e').replace(':', '').replace(apostraphe, '')}.png")
+
+        soup=BeautifulSoup(page.text,"html.parser")
+
+        images = soup.find("img")
+        print(images)
+
+        name = name.lower()
+        link = f"https://img.pokemondb.net/sprites/home/normal/{name.lower().replace('. ', '-').replace('.', '').replace(' ', '-').replace('é', 'e').replace(':', '').replace(apostraphe, '')}"
+        print(name,link)
+        with open(name+".png","wb") as file:
+            im = requests.get(link)
+            file.write(link.content)
+#img_scrape(0,1)
