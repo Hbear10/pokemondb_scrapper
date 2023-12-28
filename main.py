@@ -66,30 +66,22 @@ def scrap_pokemon(start, end):
 ,{species[2].text},{height[3].text[:length_to_get_height]},{weight[4].text[:length_to_get_weight]},{abilitiey1},\
 {hdabtext},{hp},{attack},{defence},{spattack},{spdefence},{speed}\n"
 
-    return x
+    return(x)
 
 
 #kanto = scrap_pokemon(0, 151)
 
 #with open("pokemon.txt", "w", encoding="windows-1252") as file:
- #   file.write(kanto)
+#   file.write(kanto)
 
 
-def img_scrape(start,end):
-    for i in range(start,end):
-        name = pokemon[i]
-        apostraphe = "'"
-        page = requests.get(f"https://img.pokemondb.net/sprites/home/normal/{name.lower().replace('. ', '-').replace('.', '').replace(' ', '-').replace('é', 'e').replace(':', '').replace(apostraphe, '')}.png")
-
-        soup=BeautifulSoup(page.text,"html.parser")
-
-        images = soup.find("img")
-        print(images)
-
-        name = name.lower()
-        link = f"https://img.pokemondb.net/sprites/home/normal/{name.lower().replace('. ', '-').replace('.', '').replace(' ', '-').replace('é', 'e').replace(':', '').replace(apostraphe, '')}"
-        print(name,link)
+def img_get(i,x):
+    for i in range(i,x):
+        name = pokemon[i].lower().replace('. ', '-').replace('.', '').replace(' ', '-').replace('é', 'e').replace(':', '').replace("'", '')
+        source = f"https://img.pokemondb.net/sprites/home/normal/{name}.png"
         with open(name+".png","wb") as file:
-            im = requests.get(link)
-            file.write(link.content)
-#img_scrape(0,1)
+            im = requests.get(source)
+            file.write(im.content)
+
+
+img_get(0,151)
